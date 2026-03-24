@@ -1,0 +1,441 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>企业文化类型问卷</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Microsoft YaHei','PingFang SC','SimHei',sans-serif;background:linear-gradient(135deg,#1a2a6c,#2d4373,#3a5a8c);min-height:100vh;padding:20px;display:flex;justify-content:center}
+.container{max-width:740px;width:100%;background:#fff;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,.25);padding:36px 32px;margin:auto}
+h1{text-align:center;color:#1a237e;margin-bottom:22px;font-size:23px}
+.instruction{background:#e8eaf6;border-left:4px solid #3f51b5;padding:14px 18px;margin-bottom:22px;border-radius:0 8px 8px 0;color:#444;line-height:1.9;font-size:14px}
+.progress-wrap{margin-bottom:18px}
+.step-text{text-align:center;font-size:13px;color:#999;margin-bottom:4px}
+.progress-bar{width:100%;height:6px;background:#e0e0e0;border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#3f51b5,#7c4dff);border-radius:3px;transition:width .4s}
+.section-title{background:#3f51b5;color:#fff;padding:13px 18px;border-radius:8px;font-size:17px;margin-bottom:16px;font-weight:700}
+.option-item{display:flex;align-items:flex-start;padding:14px;margin-bottom:10px;background:#fafbfc;border:2px solid #e8e8e8;border-radius:8px;transition:border-color .25s,box-shadow .25s}
+.option-item:hover{border-color:#7c4dff;box-shadow:0 2px 8px rgba(63,81,181,.1)}
+.option-label{font-weight:700;color:#3f51b5;font-size:18px;min-width:28px;margin-right:12px;padding-top:5px}
+.option-text{flex:1;color:#555;line-height:1.65;font-size:14.5px;padding-top:5px;margin-right:10px}
+.option-input{width:74px;padding:8px 4px;border:2px solid #ccc;border-radius:6px;font-size:18px;text-align:center;flex-shrink:0;transition:border-color .3s;font-family:inherit}
+.option-input:focus{outline:none;border-color:#3f51b5;box-shadow:0 0 0 3px rgba(63,81,181,.15)}
+.sum-bar{text-align:right;padding:9px 16px;border-radius:6px;font-size:15px;font-weight:700;margin:6px 0 16px;transition:background .3s,color .3s}
+.sum-ok{background:#c8e6c9;color:#2e7d32}
+.sum-err{background:#ffcdd2;color:#c62828}
+.btn-row{display:flex;justify-content:space-between;gap:12px;margin-top:18px}
+.btn{padding:11px 30px;border:none;border-radius:8px;font-size:15px;cursor:pointer;font-family:inherit;transition:background .25s,transform .15s;font-weight:600}
+.btn:active{transform:scale(.97)}
+.btn-pri{background:#3f51b5;color:#fff}.btn-pri:hover{background:#303f9f}
+.btn-pri:disabled{background:#bbb;cursor:not-allowed;transform:none}
+.btn-sec{background:#78909c;color:#fff}.btn-sec:hover{background:#546e7a}
+.btn-ok{background:#2e7d32;color:#fff;font-size:16px;padding:13px 36px}.btn-ok:hover{background:#1b5e20}
+.chart-wrap{text-align:center;margin:20px 0}
+canvas{max-width:100%;height:auto;border-radius:4px}
+table.sc{width:100%;border-collapse:collapse;margin:18px 0}
+table.sc th,table.sc td{padding:10px 12px;border:1px solid #ddd;text-align:center;font-size:14px}
+table.sc th{background:#3f51b5;color:#fff;font-weight:600}
+table.sc td{background:#fafbfc}
+.legend{display:flex;justify-content:center;gap:28px;margin:10px 0 18px;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:14px;color:#444}
+.ln-s{width:36px;height:3px;background:#1a237e;border-radius:2px}
+.ln-d{width:36px;height:0;border-top:3px dashed #c62828}
+.page{display:none}.page.active{display:block}
+.analysis{margin-top:18px;padding:18px;background:#f5f5f5;border-radius:10px;font-size:14px;line-height:2;color:#444}
+.analysis strong{color:#1a237e}
+@media(max-width:520px){
+  .container{padding:20px 14px}
+  .option-item{flex-wrap:wrap}
+  .option-input{width:100%;margin-top:8px}
+  .btn{padding:10px 16px;font-size:14px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ===== 欢迎页 ===== -->
+<div class="page active" id="pg-welcome">
+  <h1>📊 企业文化类型问卷</h1>
+  <div class="instruction">
+    <p><strong>欢迎参加企业文化类型测评！</strong></p>
+    <p style="margin-top:8px">本问卷基于竞争性价值观框架（Competing Values Framework），从六个方面评估您所在企业的文化类型。</p>
+    <p style="margin-top:8px">测评分为两个阶段：</p>
+    <p>① <strong>现状文化测评</strong> —— 评估企业目前的文化特征</p>
+    <p>② <strong>目标文化测评</strong> —— 描述企业未来 3-5 年应具备的理想文化</p>
+    <p style="margin-top:8px">每个阶段共 <strong>6 题</strong>，每题有 A、B、C、D 四个选项。请为四项分配分数，<strong>每题四项合计必须等于 100 分</strong>。得分越高表示该描述越符合实际（或越接近理想）。</p>
+  </div>
+  <div class="btn-row" style="justify-content:center">
+    <button class="btn btn-pri" onclick="startPhase('current')" style="font-size:16px;padding:13px 36px">开始测评现状文化 →</button>
+  </div>
+</div>
+
+<!-- ===== 问卷填写页（动态） ===== -->
+<div class="page" id="pg-survey"></div>
+
+<!-- ===== 现状结果页 ===== -->
+<div class="page" id="pg-res-cur">
+  <h1>📈 现状文化测评结果</h1>
+  <div id="tbl-cur"></div>
+  <div class="chart-wrap"><canvas id="cv-cur" width="560" height="560"></canvas></div>
+  <div class="legend">
+    <div class="legend-item"><div class="ln-s"></div><span>现状文化</span></div>
+  </div>
+  <div class="btn-row" style="justify-content:center">
+    <button class="btn btn-ok" onclick="startPhase('target')">继续测评目标文化 →</button>
+  </div>
+</div>
+
+<!-- ===== 最终结果页 ===== -->
+<div class="page" id="pg-res-fin">
+  <h1>📊 企业文化类型测评结果</h1>
+  <div id="tbl-fin"></div>
+  <div class="chart-wrap"><canvas id="cv-fin" width="560" height="560"></canvas></div>
+  <div class="legend">
+    <div class="legend-item"><div class="ln-s"></div><span>现状文化</span></div>
+    <div class="legend-item"><div class="ln-d"></div><span>目标文化</span></div>
+  </div>
+  <div id="analysis"></div>
+  <div class="btn-row" style="justify-content:center;margin-top:24px">
+    <button class="btn btn-sec" onclick="location.reload()">🔄 重新测评</button>
+  </div>
+</div>
+
+</div><!-- /.container -->
+
+<script>
+/* ====================== 题目数据 ====================== */
+const Q=[
+  {t:'1. 本企业的基本特点',
+   A:'很人性化，就像是一个大家庭。人们之间比较了解，关系良好。',
+   B:'充满活力，富有开拓精神。人们愿意表现自己，并承担风险。',
+   C:'目标导向，主要关注工作的结果。人们喜欢竞争，追求成就。',
+   D:'控制严格、层级分明。人们做事严格遵守正式的流程。'},
+  {t:'2. 本企业的领导风格',
+   A:'指导、促进和培养下属。',
+   B:'开拓、创新、富有冒险精神。',
+   C:'务实、进取、以结果为导向。',
+   D:'协调、组织、追求平稳运营。'},
+  {t:'3. 本企业在人员管理上的风格',
+   A:'强调团队合作、共识和员工参与。',
+   B:'鼓励冒险，强调创新、自由和独特性。',
+   C:'强调努力竞争、高标准和成就感。',
+   D:'工作有保障，强调服从、秩序和稳定。'},
+  {t:'4. 本企业凝聚力的来源',
+   A:'来源于忠诚和相互信任，大家对组织都非常忠诚。',
+   B:'来源于对革新和发展的追求，大家都想引领潮流。',
+   C:'来源于对成就和完成目标的重视，大家都敢做敢为、追求胜利。',
+   D:'来源于正式的规章制度，大家都重视企业的平稳运行。'},
+  {t:'5. 本企业的战略重点',
+   A:'强调员工发展，坚持高度的信任、开放和参与。',
+   B:'强调获取新资源、创造新挑战，崇尚尝试新事物、探索新机遇。',
+   C:'强调竞争和成就，追求不断实现更高目标和在市场中取胜。',
+   D:'强调持久性和稳定性，重视效率、控制和平稳的运营。'},
+  {t:'6. 本单位判断企业成功的标准',
+   A:'人力资源发展，团队合作，员工忠诚于企业，关心人。',
+   B:'拥有最新、最独特的产品，是产品的领导者和创新者。',
+   C:'在市场和竞争中获胜，有竞争力的市场领导地位。',
+   D:'效率，可靠的运作流程，平稳的计划和低成本的生产。'}
+];
+
+const KS=['A','B','C','D'];
+const NM={A:'团队型',B:'创新型',C:'市场型',D:'层级型'};
+
+/* ====================== 状态 ====================== */
+let phase,step;
+let raw={current:{A:[],B:[],C:[],D:[]},target:{A:[],B:[],C:[],D:[]}};
+let avg={current:{},target:{}};
+
+/* ====================== 页面切换 ====================== */
+function show(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ====================== 开始阶段 ====================== */
+function startPhase(p){
+  phase=p; step=0;
+  raw[phase]={A:[],B:[],C:[],D:[]};
+  render(); show('pg-survey');
+}
+
+/* ====================== 渲染当前题目 ====================== */
+function render(){
+  const q=Q[step];
+  const isTar=phase==='target';
+  const ttl=isTar?'目标文化测评':'现状文化测评';
+  const ins=isTar
+    ?'如果你的企业 3-5 年后发展更好，你认为下面每个题的 A、B、C、D 四个选项每项应该得多少分，要求四项加起来是 <strong>100 分</strong>。'
+    :'请根据你对本企业的了解，给下面每个题的 A、B、C、D 四个选项打分，要求四项加起来是 <strong>100 分</strong>。';
+
+  const el=document.getElementById('pg-survey');
+  el.innerHTML=`
+    <h1>${isTar?'🎯':'📝'} ${ttl}</h1>
+    <div class="progress-wrap">
+      <div class="step-text">第 ${step+1} / 6 部分</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${(step+1)/6*100}%"></div></div>
+    </div>
+    <div class="instruction">${ins}</div>
+    <div class="section-title">${q.t}</div>
+    ${KS.map(k=>`
+    <div class="option-item" onclick="this.querySelector('input').focus()">
+      <div class="option-label">${k}</div>
+      <div class="option-text">${q[k]}</div>
+      <input class="option-input" id="in${k}" type="number" min="0" max="100" step="1"
+             inputmode="numeric" placeholder="分" oninput="chkSum()" onkeydown="tabNext(event,'${k}')">
+    </div>`).join('')}
+    <div class="sum-bar sum-err" id="sumBar">总分：0 / 100</div>
+    <div class="btn-row">
+      ${step>0?'<button class="btn btn-sec" onclick="go(-1)">← 上一部分</button>':'<span></span>'}
+      <button class="btn btn-pri" id="btnNext" disabled onclick="go(1)">${step<5?'下一部分 →':'查看结果 ✓'}</button>
+    </div>`;
+
+  // 恢复已保存的值
+  KS.forEach(k=>{
+    if(raw[phase][k][step]!==undefined)
+      document.getElementById('in'+k).value=raw[phase][k][step];
+  });
+  chkSum();
+  document.getElementById('inA').focus();
+}
+
+/* Tab 键快速跳转 */
+function tabNext(e,k){
+  if(e.key==='Enter'){
+    e.preventDefault();
+    const idx=KS.indexOf(k);
+    if(idx<3) document.getElementById('in'+KS[idx+1]).focus();
+    else if(!document.getElementById('btnNext').disabled) go(1);
+  }
+}
+
+/* ====================== 检查总分 ====================== */
+function chkSum(){
+  let s=0;
+  KS.forEach(k=>{s+=parseInt(document.getElementById('in'+k).value)||0;});
+  const bar=document.getElementById('sumBar');
+  const btn=document.getElementById('btnNext');
+  if(s===100){
+    bar.className='sum-bar sum-ok';
+    bar.textContent='总分：100 / 100  ✓  可以继续';
+    btn.disabled=false;
+  }else{
+    bar.className='sum-bar sum-err';
+    bar.textContent='总分：'+s+' / 100'+(s>100?' （超出！请调整）':s>0?' （还差'+(100-s)+'分）':'');
+    btn.disabled=true;
+  }
+}
+
+/* ====================== 保存当前页数据 ====================== */
+function save(){
+  KS.forEach(k=>{raw[phase][k][step]=parseInt(document.getElementById('in'+k).value)||0;});
+}
+
+/* ====================== 翻页 ====================== */
+function go(dir){
+  save();
+  step+=dir;
+  if(step<0){step=0;return;}
+  if(step>=6){
+    // 计算均值
+    KS.forEach(k=>{
+      avg[phase][k]=raw[phase][k].reduce((a,b)=>a+b,0)/6;
+    });
+    if(phase==='current'){showCurRes();}
+    else{showFinRes();}
+    return;
+  }
+  render();
+}
+
+/* ====================== 生成表格 ====================== */
+function mkTbl(cur,tar){
+  let h='<table class="sc"><tr><th>文化类型</th><th>对应选项</th><th>现状得分</th>';
+  if(tar) h+='<th>目标得分</th><th>差值</th>';
+  h+='</tr>';
+  KS.forEach(k=>{
+    h+=`<tr><td><strong>${NM[k]}</strong></td><td>${k}</td><td>${cur[k].toFixed(1)}</td>`;
+    if(tar){
+      const d=tar[k]-cur[k];
+      const sg=d>0?'+':'';
+      const cl=d>0?'color:#2e7d32':d<0?'color:#c62828':'color:#888';
+      h+=`<td>${tar[k].toFixed(1)}</td><td style="${cl};font-weight:700">${sg}${d.toFixed(1)}</td>`;
+    }
+    h+='</tr>';
+  });
+  h+='</table>';
+  return h;
+}
+
+/* ====================== 显示现状结果 ====================== */
+function showCurRes(){
+  document.getElementById('tbl-cur').innerHTML=mkTbl(avg.current,null);
+  show('pg-res-cur');
+  setTimeout(()=>drawChart('cv-cur',avg.current,null),100);
+}
+
+/* ====================== 显示最终结果 ====================== */
+function showFinRes(){
+  document.getElementById('tbl-fin').innerHTML=mkTbl(avg.current,avg.target);
+  show('pg-res-fin');
+  setTimeout(()=>drawChart('cv-fin',avg.current,avg.target),100);
+
+  // 分析文字
+  let mx1='A',mv1=0; KS.forEach(k=>{if(avg.current[k]>mv1){mv1=avg.current[k];mx1=k;}});
+  let mx2='A',mv2=0; KS.forEach(k=>{if(avg.target[k]>mv2){mv2=avg.target[k];mx2=k;}});
+  let bk='A',bv=0;   KS.forEach(k=>{const d=Math.abs(avg.target[k]-avg.current[k]);if(d>bv){bv=d;bk=k;}});
+  const bdir=avg.target[bk]>avg.current[bk]?'增强':'减弱';
+
+  document.getElementById('analysis').innerHTML=`
+    <div class="analysis">
+      <strong>📋 结果解读：</strong><br>
+      • 您所在企业当前的主导文化类型为 <strong>${NM[mx1]}</strong>（${mv1.toFixed(1)} 分）。<br>
+      • 您期望的目标主导文化类型为 <strong>${NM[mx2]}</strong>（${mv2.toFixed(1)} 分）。<br>
+      • 变化最大的维度为 <strong>${NM[bk]}</strong>，需要${bdir} <strong>${bv.toFixed(1)}</strong> 分。<br>
+      ${mx1!==mx2?'• 主导文化类型发生了改变，说明您认为企业需要进行文化转型。':'• 主导文化类型未变化，但各维度比重有所调整。'}
+    </div>`;
+}
+
+/* ==================== 画图 ==================== */
+function drawChart(id,cur,tar){
+  const cv=document.getElementById(id);
+  const ctx=cv.getContext('2d');
+  const W=cv.width, H=cv.height;
+  const cx=W/2, cy=H/2;
+  const R=210;           // 方框半边长
+  const maxS=50;
+  const sc=R/maxS;       // 4.2 px/分
+
+  ctx.clearRect(0,0,W,H);
+
+  // 方向映射：A=左上, B=右上, C=右下, D=左下
+  const dr={A:{x:-1,y:-1},B:{x:1,y:-1},C:{x:1,y:1},D:{x:-1,y:1}};
+
+  // --- 背景方框 ---
+  ctx.strokeStyle='#bbb'; ctx.lineWidth=1;
+  ctx.strokeRect(cx-R,cy-R,R*2,R*2);
+
+  // --- 对角线 ---
+  ctx.strokeStyle='#aaa'; ctx.lineWidth=.8;
+  ctx.setLineDash([]);
+  ln(ctx, cx-R,cy-R, cx+R,cy+R);
+  ln(ctx, cx+R,cy-R, cx-R,cy+R);
+
+  // --- 十字轴（带箭头） ---
+  ctx.strokeStyle='#777'; ctx.lineWidth=1; ctx.fillStyle='#777';
+  arw(ctx, cx-R-18, cy, cx+R+18, cy);
+  arw(ctx, cx, cy-R-18, cx, cy+R+18);
+
+  // --- 刻度数字 & 小刻度线 ---
+  ctx.font='12px "Microsoft YaHei",sans-serif';
+  ctx.fillStyle='#777';
+  for(let s=10;s<=50;s+=10){
+    const p=s*sc;
+
+    // A（左上）
+    let x=cx-p, y=cy-p;
+    ctx.textAlign='right';
+    ctx.fillText(s, x-7, y+4);
+    tick(ctx,x,y, -3,3, 3,-3);
+
+    // B（右上）
+    x=cx+p; y=cy-p;
+    ctx.textAlign='left';
+    ctx.fillText(s, x+7, y+4);
+    tick(ctx,x,y, -3,-3, 3,3);
+
+    // C（右下）
+    x=cx+p; y=cy+p;
+    ctx.textAlign='left';
+    ctx.fillText(s, x+7, y+5);
+    tick(ctx,x,y, -3,3, 3,-3);
+
+    // D（左下）
+    x=cx-p; y=cy+p;
+    ctx.textAlign='right';
+    ctx.fillText(s, x-7, y+5);
+    tick(ctx,x,y, -3,-3, 3,3);
+  }
+
+  // --- 象限标签 ---
+  ctx.fillStyle='#333'; ctx.font='bold 16px "Microsoft YaHei",sans-serif';
+  ctx.textAlign='center';
+  ctx.fillText('团队型', cx-R/2, cy-R+20);
+  ctx.fillText('创新型', cx+R/2, cy-R+20);
+  ctx.fillText('层级型', cx-R/2, cy+R-10);
+  ctx.fillText('市场型', cx+R/2, cy+R-10);
+
+  // --- 画多边形 ---
+  if(cur) drawPoly(ctx,cx,cy,sc,dr,cur,false,'#1a237e','rgba(26,35,126,0.08)');
+  if(tar) drawPoly(ctx,cx,cy,sc,dr,tar,true, '#c62828','rgba(198,40,40,0.06)');
+}
+
+function drawPoly(ctx,cx,cy,sc,dr,scores,dashed,color,fill){
+  const pts=KS.map(k=>({
+    x:cx+dr[k].x*scores[k]*sc,
+    y:cy+dr[k].y*scores[k]*sc,
+    k:k
+  }));
+
+  ctx.beginPath();
+  ctx.setLineDash(dashed?[10,7]:[]);
+  ctx.lineWidth=3;
+  ctx.strokeStyle=color;
+  ctx.fillStyle=fill;
+  ctx.moveTo(pts[0].x,pts[0].y);
+  for(let i=1;i<4;i++) ctx.lineTo(pts[i].x,pts[i].y);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // 顶点圆点 + 数值标签
+  pts.forEach(p=>{
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,5,0,Math.PI*2);
+    ctx.fillStyle=color;
+    ctx.fill();
+    ctx.strokeStyle='#fff'; ctx.lineWidth=2;
+    ctx.stroke();
+
+    // 数值标签
+    const ox=dr[p.k].x*16;
+    const oy=dr[p.k].y*16;
+    ctx.font='bold 13px "Microsoft YaHei",sans-serif';
+    ctx.fillStyle=color;
+    ctx.textAlign=dr[p.k].x<0?'right':'left';
+    ctx.textBaseline=dr[p.k].y<0?'bottom':'top';
+    ctx.fillText(scores[p.k].toFixed(1), p.x+ox, p.y+oy);
+  });
+  ctx.textBaseline='alphabetic';
+}
+
+/* --- 辅助绘图函数 --- */
+function ln(ctx,x1,y1,x2,y2){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();}
+
+function tick(ctx,x,y,dx1,dy1,dx2,dy2){
+  ctx.strokeStyle='#aaa'; ctx.lineWidth=.7;
+  ctx.beginPath(); ctx.moveTo(x+dx1,y+dy1); ctx.lineTo(x+dx2,y+dy2); ctx.stroke();
+}
+
+function arw(ctx,x1,y1,x2,y2){
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  const a=Math.atan2(y2-y1,x2-x1), h=9;
+  // 末端箭头
+  ctx.beginPath();
+  ctx.moveTo(x2,y2);
+  ctx.lineTo(x2-h*Math.cos(a-.4),y2-h*Math.sin(a-.4));
+  ctx.lineTo(x2-h*Math.cos(a+.4),y2-h*Math.sin(a+.4));
+  ctx.closePath(); ctx.fill();
+  // 起端箭头
+  const a2=a+Math.PI;
+  ctx.beginPath();
+  ctx.moveTo(x1,y1);
+  ctx.lineTo(x1-h*Math.cos(a2-.4),y1-h*Math.sin(a2-.4));
+  ctx.lineTo(x1-h*Math.cos(a2+.4),y1-h*Math.sin(a2+.4));
+  ctx.closePath(); ctx.fill();
+}
+</script>
+
+
+</body></html>
